@@ -7,9 +7,14 @@
 
 package org.usfirst.frc.team9562.robot;
 
+
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team9562.robot.commands.ExampleCommand;
@@ -29,7 +34,16 @@ public class Robot extends TimedRobot {
 
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
-
+	
+	
+	
+	ADXRS450_Gyro gyro;
+	double angulo;
+	Joystick j_izquierdo,j_derecho;
+	Button b_x,b_y,b_a,b_b;
+	BuiltInAccelerometer acelerometro;
+	
+	
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
@@ -40,6 +54,22 @@ public class Robot extends TimedRobot {
 		m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
+		
+		gyro = new ADXRS450_Gyro();
+		j_izquierdo= new Joystick(0);
+		j_derecho= new Joystick(1);
+		
+		b_x= new JoystickButton(j_derecho, 0);
+		b_y= new JoystickButton(j_derecho, 1);
+		b_a= new JoystickButton(j_derecho, 2);
+		b_b= new JoystickButton(j_derecho, 3);
+
+		acelerometro= new BuiltInAccelerometer (Accelerometer.Range.k16G);
+		
+		double juancamaney;
+		
+		
+		
 	}
 
 	/**
@@ -91,6 +121,23 @@ public class Robot extends TimedRobot {
 	@Override
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
+		
+		angulo= gyro.getAngle();
+		System.out.println(angulo);
+		
+		if(b_x.get()) System.out.println("X presionado");
+		
+		if(b_y.get()) System.out.println("Y presionado");
+
+		if(b_b.get()) System.out.println("B presionado");
+		
+		if(b_a.get()) System.out.println("A presionado");
+		
+		System.out.println("X"+acelerometro.getX());
+		
+		System.out.println("Y"+acelerometro.getY());
+		
+		System.out.println("Z"+acelerometro.getZ());
 	}
 
 	@Override
@@ -110,6 +157,8 @@ public class Robot extends TimedRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		
+		
 	}
 
 	/**
