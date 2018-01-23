@@ -158,6 +158,8 @@ public class Robot extends TimedRobot {
 		System.out.println("Y"+acelerometro.getY());
 		
 		System.out.println("Z"+acelerometro.getZ());
+		
+		Timer.delay(.5);
 	}
 
 	@Override
