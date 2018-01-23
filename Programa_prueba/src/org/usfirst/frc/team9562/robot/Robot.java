@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.interfaces.Accelerometer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -43,6 +44,11 @@ public class Robot extends TimedRobot {
 	Button b_x,b_y,b_a,b_b;
 	BuiltInAccelerometer acelerometro;
 	
+	DifferentialDrive transmision;
+	
+	PWMTalonSRX m_izquierdo1,m_izquierdo2,m_derecho1,m_derecho2;
+	
+	SpeedControllerGroup izquierdo,derecho;
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -66,7 +72,16 @@ public class Robot extends TimedRobot {
 
 		acelerometro= new BuiltInAccelerometer (Accelerometer.Range.k16G);
 		
-		double juancamaney;
+		izquierdo = new SpeedControllerGroup(m_izquierdo1,m_izquierdo2);
+		derecho = new SpeedControllerGroup(m_derecho1,m_derecho2);
+		
+		
+		m_izquierdo1 = new PWMTalonSRX(0);
+		m_izquierdo2 = new PWMTalonSRX(1);
+		m_derecho1 = new PWMTalonSRX(2);
+		m_derecho2 = new PWMTalonSRX(3);
+		
+		transmision= new DifferentialDrive(izquierdo, derecho);
 		
 		
 		
@@ -122,7 +137,12 @@ public class Robot extends TimedRobot {
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
 		
+		transmision.tankDrive(j_izquierdo.getY(),j_derecho.getY());
+		
+		
 		angulo= gyro.getAngle();
+		
+		
 		System.out.println(angulo);
 		
 		if(b_x.get()) System.out.println("X presionado");
