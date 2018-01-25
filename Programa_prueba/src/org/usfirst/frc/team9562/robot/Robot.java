@@ -39,16 +39,22 @@ public class Robot extends TimedRobot {
 	
 	
 	ADXRS450_Gyro gyro;
+	
 	double angulo;
+	
 	Joystick j_izquierdo,j_derecho;
+	
 	Button b_x,b_y,b_a,b_b;
+	
 	BuiltInAccelerometer acelerometro;
 	
 	DifferentialDrive transmision;
 	
-	PWMTalonSRX m_izquierdo1,m_izquierdo2,m_derecho1,m_derecho2;
+	Victor motor,m_izquierdo2,m_derecho1,m_derecho2;
 	
 	SpeedControllerGroup izquierdo,derecho;
+	boolean x;
+	
 	
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -62,26 +68,28 @@ public class Robot extends TimedRobot {
 		SmartDashboard.putData("Auto mode", m_chooser);
 		
 		gyro = new ADXRS450_Gyro();
-		j_izquierdo= new Joystick(0);
-		j_derecho= new Joystick(1);
 		
-		b_x= new JoystickButton(j_derecho, 0);
+		//j_izquierdo= new Joystick(0);
+		j_derecho= new Joystick(0);
+		
+		b_x= new JoystickButton(j_derecho, 4);
 		b_y= new JoystickButton(j_derecho, 1);
 		b_a= new JoystickButton(j_derecho, 2);
 		b_b= new JoystickButton(j_derecho, 3);
+		
 
-		acelerometro= new BuiltInAccelerometer (Accelerometer.Range.k16G);
+		acelerometro= new BuiltInAccelerometer (Accelerometer.Range.k8G);
 		
-		izquierdo = new SpeedControllerGroup(m_izquierdo1,m_izquierdo2);
-		derecho = new SpeedControllerGroup(m_derecho1,m_derecho2);
+	//	izquierdo = new SpeedControllerGroup(m_izquierdo1,m_izquierdo2);
+	//	derecho = new SpeedControllerGroup(m_derecho1,m_derecho2);
 		
 		
-		m_izquierdo1 = new PWMTalonSRX(0);
-		m_izquierdo2 = new PWMTalonSRX(1);
-		m_derecho1 = new PWMTalonSRX(2);
-		m_derecho2 = new PWMTalonSRX(3);
+		motor = new Victor(1);
+	//	m_izquierdo2 = new PWMTalonSRX(1);
+	//	m_derecho1 = new PWMTalonSRX(2);
+	//	m_derecho2 = new PWMTalonSRX(3);
 		
-		transmision= new DifferentialDrive(izquierdo, derecho);
+	//	transmision= new DifferentialDrive(izquierdo, derecho);
 		
 		
 		
@@ -137,29 +145,33 @@ public class Robot extends TimedRobot {
 	public void autonomousPeriodic() {
 		Scheduler.getInstance().run();
 		
-		transmision.tankDrive(j_izquierdo.getY(),j_derecho.getY());
+	//	transmision.tankDrive(j_izquierdo.getY(),j_derecho.getY());
 		
 		
 		angulo= gyro.getAngle();
+		x=b_x.get();
 		
+		System.out.println("angulo= "+angulo);
 		
-		System.out.println(angulo);
+		//boolean x=b_x.get();
 		
-		if(b_x.get()) System.out.println("X presionado");
+		System.out.println(x);
 		
-		if(b_y.get()) System.out.println("Y presionado");
+		if(b_y.get()) {System.out.println("Y presionado");}
 
-		if(b_b.get()) System.out.println("B presionado");
+		if(b_b.get()) {System.out.println("B presionado");}
 		
-		if(b_a.get()) System.out.println("A presionado");
+		if(b_a.get()) {System.out.println("A presionado");}
+		else {System.out.println("False A");}
+				
 		
-		System.out.println("X"+acelerometro.getX());
+		System.out.println("X= "+acelerometro.getX());
 		
-		System.out.println("Y"+acelerometro.getY());
+		System.out.println("Y= "+acelerometro.getY());
 		
-		System.out.println("Z"+acelerometro.getZ());
+		System.out.println("Z= "+acelerometro.getZ());
 		
-		Timer.delay(.5);
+		Timer.delay(1);
 	}
 
 	@Override
@@ -180,6 +192,30 @@ public class Robot extends TimedRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 		
+		angulo= gyro.getAngle();
+		x=b_x.get();
+		
+		System.out.println("angulo= "+angulo);
+		
+		//boolean x=b_x.get();
+		
+		System.out.println(x);
+		
+		if(b_y.get()) {System.out.println("Y presionado");}
+
+		if(b_b.get()) {System.out.println("B presionado");}
+		
+		if(b_a.get()) {motor.set(1);} else {motor.set(0);}
+		
+				
+		
+		System.out.println("X= "+acelerometro.getX());
+		
+		System.out.println("Y= "+acelerometro.getY());
+		
+		System.out.println("Z= "+acelerometro.getZ());
+		
+		//Timer.delay(1);
 		
 	}
 
