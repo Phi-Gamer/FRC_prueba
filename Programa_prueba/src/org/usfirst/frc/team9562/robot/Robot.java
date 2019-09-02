@@ -125,6 +125,12 @@ public class Robot extends TimedRobot {
 	public void autonomousInit() {
 		m_autonomousCommand = m_chooser.getSelected();
 
+
+		System.out.println("angulo= ");
+		System.out.println("angulo= ");
+		System.out.println("angulo= ");
+		System.out.println("angulo= ");
+
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
 		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
